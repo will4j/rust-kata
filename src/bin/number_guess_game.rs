@@ -1,39 +1,75 @@
+use std::cmp::Ordering;
 use std::io::{self, Write};
 
 use rand::Rng;
 
 fn main() -> io::Result<()> {
-    println!("Guessing a random number from range!");
+    println!("Let's Play a Number Guessing Game!");
 
-    print!("New Game: ");
-    io::stdout().flush().unwrap();
+    let (mut min, mut max, secret_number) = new_game();
 
+    loop {
+        let prompt = format!("Guess a Number between {} and {}", min, max);
+        let guess = input_int(&prompt);
+
+        print!("You guess {guess}, ");
+        match guess.cmp(&secret_number) {
+            Ordering::Less => {
+                println!("Too small!");
+                min = guess
+            }
+            Ordering::Greater => {
+                println!("Too big!");
+                max = guess
+            }
+            Ordering::Equal => {
+                println!("You win!");
+                break;
+            }
+        }
+    }
+    Ok(())
+}
+
+fn new_game() -> (u32, u32, u32) {
     let mut input_str = String::new();
-    io::stdin().read_line(&mut input_str).expect("input error");
+    input(&mut input_str, "New Game");
 
     let range: Vec<u32> = input_str
         .split_whitespace()
         .map(|s| s.parse().expect("parse error"))
         .collect();
+
     let min = range[0];
     let max = range[1];
     let secret_number = rand::thread_rng().gen_range(min..=max);
 
+    (min, max, secret_number)
+}
+
+fn input_int(prompt: &str) -> u32 {
+    let num;
     loop {
-        print!("Guess a Number range {} to {}: ", min, max);
-        io::stdout().flush().unwrap();
+        let mut input_str = String::new();
+        input(&mut input_str, prompt);
 
-        let mut guess = String::new();
-        io::stdin().read_line(&mut guess).expect("Failed to read line");
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
+        match input_str.trim().parse() {
+            Ok(_num) => {
+                num = _num;
+                break;
+            }
             Err(_) => {
-                println!("something wrong");
+                println!("please input a integer number.");
                 continue;
-            },
-        };
-        println!("{secret_number} {guess}");
+            }
+        }
     }
+    num
+}
 
-    Ok(())
+fn input(input_str: &mut String, prompt: &str) {
+    print!("{prompt}: ");
+    io::stdout().flush().unwrap();
+
+    io::stdin().read_line(input_str).expect("failed to read line");
 }
