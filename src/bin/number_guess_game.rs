@@ -6,13 +6,19 @@ use rand::Rng;
 fn main() -> io::Result<()> {
     println!("Let's Play a Number Guessing Game!");
 
+    // 根据用户输入创建新游戏，返回最小值、最大值和随机数字答案
     let (mut min, mut max, secret_number) = new_game();
 
+    // 记录猜的次数
+    let mut count: u32 = 0;
     loop {
+        // 用户输入猜测数字
         let prompt = format!("Guess a Number between {} and {}", min, max);
         let guess = input_int(&prompt);
 
         print!("You guess {guess}, ");
+        count += 1;
+        // 比对结果，猜对则游戏结束，否则调整数字范围
         match guess.cmp(&secret_number) {
             Ordering::Less => {
                 println!("Too small!");
@@ -23,7 +29,7 @@ fn main() -> io::Result<()> {
                 max = guess
             }
             Ordering::Equal => {
-                println!("You win!");
+                println!("You win with {count} guesses!");
                 break;
             }
         }
