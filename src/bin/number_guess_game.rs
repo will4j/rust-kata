@@ -12,7 +12,7 @@ fn main() -> io::Result<()> {
     // 记录猜的次数
     let mut count: u32 = 0;
     loop {
-        // 用户输入猜测数字
+        // 用户输入数字
         let prompt = format!("Guess a Number between {} and {}", min, max);
         let guess = input_int(&prompt);
 
