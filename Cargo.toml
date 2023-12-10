@@ -10,4 +10,4 @@ rand = "0.8.5"
 
 [[bin]]
 name = "number-guessing-game"
-path = "src/bin/number_guesssing_game.rs"
+path = "src/bin/number_guessing_game.rs"
