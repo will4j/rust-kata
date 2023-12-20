@@ -138,6 +138,6 @@ fn do_guess(min: u32, max: u32, secret_number: u32, guess_str: &str) -> Result<(
                 Ordering::Equal => Ok((0, _num, _num)),
             }
         }
-        Err(_) => return Err(format!("Please input a integer number"))
+        Err(_) => return Err(String::from("Please input a integer number"))
     }
 }
